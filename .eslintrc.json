@@ -1,11 +1,5 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:es5/no-es2016"
-  ],
-  "plugins": [
-    "es5"
-  ],
+  "extends": "eslint:recommended",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 8
