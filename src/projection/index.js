@@ -154,8 +154,14 @@ export function projectionMutator(projectAt) {
   };
 
   function recenter() {
-    var center = scaleTranslateRotate(k, 0, 0, sx, sy, alpha).apply(null, project(lambda, phi)),
-        transform = (alpha ? scaleTranslateRotate : scaleTranslate)(k, x - center[0], y - center[1], sx, sy, alpha);
+    var center, transform;
+    if(alpha) {
+      center = scaleTranslateRotate(k, 0, 0, sx, sy, alpha).apply(null, project(lambda, phi)),
+      transform = scaleTranslateRotate(k, x - center[0], y - center[1], sx, sy, alpha);
+    } else {
+      center = scaleTranslate(k, 0, 0, sx, sy).apply(null, project(lambda, phi)),
+      transform = scaleTranslate(k, x - center[0], y - center[1], sx, sy);
+    }
     rotate = rotateRadians(deltaLambda, deltaPhi, deltaGamma);
     projectTransform = compose(project, transform);
     projectRotateTransform = compose(rotate, projectTransform);
