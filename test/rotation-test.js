@@ -17,7 +17,7 @@ tape("a rotation of [+90°, 0°] wraps around when crossing the antimeridian", f
   test.end();
 });
 
-tape("a rotation of [-45°, -45°] rotates longitude and latitude", function(test) {
+tape("a rotation of [-45°, 45°] rotates longitude and latitude", function(test) {
   var rotation = d3.geoRotation([-45, 45])([0, 0]);
   test.inDelta(rotation[0], -54.73561, 1e-6);
   test.inDelta(rotation[1], 30, 1e-6);
