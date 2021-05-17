@@ -10,16 +10,16 @@ PathString.prototype = {
     return this;
   },
   polygonStart: function() {
-    this._line = 0;
+    this._line = false;
   },
   polygonEnd: function() {
-    this._line = NaN;
+    this._line = true;
   },
   lineStart: function() {
     this._point = 0;
   },
   lineEnd: function() {
-    if (this._line === 0) this._string.push("Z");
+    if (!this._line) this._string.push("Z");
     this._point = NaN;
   },
   point: function(x, y) {
