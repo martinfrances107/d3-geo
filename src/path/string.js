@@ -2,6 +2,12 @@ export default function PathString() {
   this._string = [];
 }
 
+const POINT_STATE = {
+  LineAtStart: 'LINE_AT_START',
+  LineInProgress: 'LINE_IN_PROGRESS',
+  NotInLine: 'NOT_IN_LINE'
+};
+
 PathString.prototype = {
   _radius: 4.5,
   _circle: circle(4.5),
@@ -16,23 +22,24 @@ PathString.prototype = {
     this._line = true;
   },
   lineStart: function() {
-    this._point = 0;
+    this._point = POINT_STATE.LineAtStart;
   },
   lineEnd: function() {
     if (!this._line) this._string.push("Z");
-    this._point = NaN;
+    this._point = POINT_STATE.NotInLine;
   },
   point: function(x, y) {
     switch (this._point) {
-      case 0: {
+      case POINT_STATE.LineAtStart: {
         this._string.push("M", x, ",", y);
-        this._point = 1;
+        this._point = POINT_STATE.LineInProgress;
         break;
       }
-      case 1: {
+      case POINT_STATE.LineInProgress: {
         this._string.push("L", x, ",", y);
         break;
       }
+      case POINT_STATE.NotInLine:
       default: {
         if (this._circle == null) this._circle = circle(this._radius);
         this._string.push("M", x, ",", y, this._circle);
