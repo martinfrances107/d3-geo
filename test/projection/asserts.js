@@ -1,14 +1,10 @@
-var tape = require("tape");
+import assert from "assert";
 
-tape.Test.prototype.projectionEqual = function(projection, location, point, delta) {
-  this._assert(planarEqual(projection(location), point, delta || 1e-6)
-      && sphericalEqual(projection.invert(point), location, delta || 1e-3), {
-    message: "should be projected equivalents",
-    operator: "planarEqual",
-    actual: [projection.invert(point), projection(location)],
-    expected: [location, point]
-  });
-};
+export function assertProjectionEqual(projection, location, point, delta) {
+  assert(planarEqual(projection(location), point, delta || 1e-6)
+      && sphericalEqual(projection.invert(point), location, delta || 1e-3), 
+    `${[projection.invert(point), projection(location)]} should be projected equivalents; expected: ${[location, point]}`);
+}
 
 function planarEqual(actual, expected, delta) {
   return Array.isArray(actual)

@@ -1,14 +1,11 @@
-var tape = require("tape"),
-    d3 = require("../../");
+import {geoStereographic} from "../../src/index.js";
+import {assertProjectionEqual} from "./asserts.js";
 
-require("./projectionEqual");
-
-tape("stereographic(point) returns the expected result", function(test) {
-  var stereographic = d3.geoStereographic().translate([0, 0]).scale(1);
-  test.projectionEqual(stereographic, [  0,   0], [ 0,  0]);
-  test.projectionEqual(stereographic, [-90,   0], [-1,  0]);
-  test.projectionEqual(stereographic, [ 90,   0], [ 1,  0]);
-  test.projectionEqual(stereographic, [  0, -90], [ 0,  1]);
-  test.projectionEqual(stereographic, [  0,  90], [ 0, -1]);
-  test.end();
+it("stereographic(point) returns the expected result", () => {
+  const stereographic = geoStereographic().translate([0, 0]).scale(1);
+  assertProjectionEqual(stereographic, [  0,   0], [ 0,  0]);
+  assertProjectionEqual(stereographic, [-90,   0], [-1,  0]);
+  assertProjectionEqual(stereographic, [ 90,   0], [ 1,  0]);
+  assertProjectionEqual(stereographic, [  0, -90], [ 0,  1]);
+  assertProjectionEqual(stereographic, [  0,  90], [ 0, -1]);
 });

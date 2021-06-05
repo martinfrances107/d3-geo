@@ -1,11 +1,9 @@
-var tape = require("tape"),
-    d3 = require("../../");
+import {geoMercator, geoPath} from "../../src/index.js";
+import {assertPathEqual} from "../asserts.js";
 
-require("../pathEqual");
-
-tape("a rotation of a degenerate polygon should not break", function(test) {
-  var projection = d3.geoMercator().rotate([-134.300, 25.776]).scale(750).translate([0, 0]);
-  test.pathEqual(d3.geoPath(projection)({
+it("a rotation of a degenerate polygon should not break", () => {
+  const projection = geoMercator().rotate([-134.300, 25.776]).scale(750).translate([0, 0]);
+  assertPathEqual(geoPath(projection)({
     "type": "Polygon",
     "coordinates": [
       [
@@ -17,5 +15,4 @@ tape("a rotation of a degenerate polygon should not break", function(test) {
       ]
     ]
   }), "M-111.644162,-149.157654L-111.647235,-149.203744L-111.647235,-149.203744L-111.650307,-149.249835Z");
-  test.end();
 });

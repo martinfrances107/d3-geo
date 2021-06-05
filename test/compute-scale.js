@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 
-var width = 960 - 1,
-    height = 500 - 1,
-    projectionName = process.argv[2],
-    projectionSymbol = "geo" + projectionName[0].toUpperCase() + projectionName.slice(1);
+import {format} from "d3-format";
+import * as d3 from "../src/index.js";
+
+const width = 960 - 1;
+const height = 500 - 1;
+const projectionName = process.argv[2];
+const projectionSymbol = "geo" + projectionName[0].toUpperCase() + projectionName.slice(1);
 
 if (!/^[a-z0-9]+$/i.test(projectionName)) throw new Error;
 
-var topojson = require("topojson-client"),
-    d3_format = require("d3-format"),
-    d3_geo = require("../");
+const formatNumber = format(".6");
 
-var formatNumber = d3_format.format(".6");
-
-var projection = d3_geo[projectionSymbol]()
+const projection = d3[projectionSymbol]()
     .precision(0.01)
     .scale(1)
     .translate([0, 0])
@@ -21,7 +20,7 @@ var projection = d3_geo[projectionSymbol]()
 
 if (projection.rotate) projection.rotate([0, 0]);
 
-var land = {type: "Sphere"};
+const land = {type: "Sphere"};
 
 switch (projectionName) {
   case "conicConformal":
@@ -31,10 +30,10 @@ switch (projectionName) {
   }
 }
 
-var path = d3_geo.geoPath()
+const path = d3.geoPath()
     .projection(projection);
 
-var bounds = path.bounds(land),
+const bounds = path.bounds(land),
     dx = bounds[1][0] - bounds[0][0],
     dy = bounds[1][1] - bounds[0][1],
     cx = (bounds[1][0] + bounds[0][0]) / 2,

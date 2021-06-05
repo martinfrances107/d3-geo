@@ -1,60 +1,54 @@
-var tape = require("tape"),
-    d3_geo = require("../../"),
-    testContext = require("./test-context");
+import assert from "assert";
+import {geoAlbers, geoEquirectangular, geoPath} from "../../src/index.js";
+import {testContext} from "./test-context.js";
 
-var equirectangular = d3_geo.geoEquirectangular()
+const equirectangular = geoEquirectangular()
     .scale(900 / Math.PI)
     .precision(0);
 
 function testPath(projection, object) {
-  var context = testContext();
+  const context = testContext();
 
-  d3_geo.geoPath()
+  geoPath()
       .projection(projection)
-      .context(context)
-      (object);
+      .context(context) (object);
 
   return context.result();
 }
 
-tape("geoPath.projection() defaults to null", function(test) {
-  var path = d3_geo.geoPath();
-  test.strictEqual(path.projection(), null);
-  test.end();
+it("geoPath.projection() defaults to null", () => {
+  const path = geoPath();
+  assert.strictEqual(path.projection(), null);
 });
 
-tape("geoPath.context() defaults to null", function(test) {
-  var path = d3_geo.geoPath();
-  test.strictEqual(path.context(), null);
-  test.end();
+it("geoPath.context() defaults to null", () => {
+  const path = geoPath();
+  assert.strictEqual(path.context(), null);
 });
 
-tape("d3.geoPath(projection) sets the initial projection", function(test) {
-  var projection = d3_geo.geoAlbers(), path = d3_geo.geoPath(projection);
-  test.strictEqual(path.projection(), projection);
-  test.end();
+it("geoPath(projection) sets the initial projection", () => {
+  const projection = geoAlbers(), path = geoPath(projection);
+  assert.strictEqual(path.projection(), projection);
 });
 
-tape("d3.geoPath(projection, context) sets the initial projection and context", function(test) {
-  var context = testContext(), projection = d3_geo.geoAlbers(), path = d3_geo.geoPath(projection, context);
-  test.strictEqual(path.projection(), projection);
-  test.strictEqual(path.context(), context);
-  test.end();
+it("geoPath(projection, context) sets the initial projection and context", () => {
+  const context = testContext(), projection = geoAlbers(), path = geoPath(projection, context);
+  assert.strictEqual(path.projection(), projection);
+  assert.strictEqual(path.context(), context);
 });
 
-tape("geoPath(Point) renders a point", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(Point) renders a point", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "Point",
     coordinates: [-63, 18]
   }), [
     {type: "moveTo", x: 170, y: 160},
     {type: "arc", x: 165, y: 160, r: 4.5}
   ]);
-  test.end();
 });
 
-tape("geoPath(MultiPoint) renders a point", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(MultiPoint) renders a point", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "MultiPoint",
     coordinates: [[-63, 18], [-62, 18], [-62, 17]]
   }), [
@@ -62,11 +56,10 @@ tape("geoPath(MultiPoint) renders a point", function(test) {
     {type: "moveTo", x: 175, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
     {type: "moveTo", x: 175, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
   ]);
-  test.end();
 });
 
-tape("geoPath(LineString) renders a line string", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(LineString) renders a line string", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "LineString",
     coordinates: [[-63, 18], [-62, 18], [-62, 17]]
   }), [
@@ -74,11 +67,10 @@ tape("geoPath(LineString) renders a line string", function(test) {
     {type: "lineTo", x: 170, y: 160},
     {type: "lineTo", x: 170, y: 165}
   ]);
-  test.end();
 });
 
-tape("geoPath(Polygon) renders a polygon", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(Polygon) renders a polygon", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "Polygon",
     coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
   }), [
@@ -87,11 +79,10 @@ tape("geoPath(Polygon) renders a polygon", function(test) {
     {type: "lineTo", x: 170, y: 165},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath(GeometryCollection) renders a geometry collection", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(GeometryCollection) renders a geometry collection", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "GeometryCollection",
     geometries: [{
       type: "Polygon",
@@ -103,11 +94,10 @@ tape("geoPath(GeometryCollection) renders a geometry collection", function(test)
     {type: "lineTo", x: 170, y: 165},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath(Feature) renders a feature", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(Feature) renders a feature", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "Feature",
     geometry: {
       type: "Polygon",
@@ -119,11 +109,10 @@ tape("geoPath(Feature) renders a feature", function(test) {
     {type: "lineTo", x: 170, y: 165},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath(FeatureCollection) renders a feature collection", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(FeatureCollection) renders a feature collection", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "FeatureCollection",
     features: [{
       type: "Feature",
@@ -138,22 +127,20 @@ tape("geoPath(FeatureCollection) renders a feature collection", function(test) {
     {type: "lineTo", x: 170, y: 165},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath(…) wraps longitudes outside of ±180°", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(…) wraps longitudes outside of ±180°", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "Point",
     coordinates: [180 + 1e-6, 0]
   }), [
     {type: "moveTo", x: -415, y: 250},
     {type: "arc", x: -420, y: 250, r: 4.5}
   ]);
-  test.end();
 });
 
-tape("geoPath(…) observes the correct winding order of a tiny polygon", function(test) {
-  test.deepEqual(testPath(equirectangular, {
+it("geoPath(…) observes the correct winding order of a tiny polygon", () => {
+  assert.deepStrictEqual(testPath(equirectangular, {
     type: "Polygon",
     coordinates: [[
       [-0.06904102953339501, 0.346043661846373],
@@ -169,11 +156,10 @@ tape("geoPath(…) observes the correct winding order of a tiny polygon", functi
     {type: "lineTo", x: 479, y: 251},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath.projection(null)(…) does not transform coordinates", function(test) {
-  test.deepEqual(testPath(null, {
+it("geoPath.projection(null)(…) does not transform coordinates", () => {
+  assert.deepStrictEqual(testPath(null, {
     type: "Polygon",
     coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
   }), [
@@ -182,31 +168,28 @@ tape("geoPath.projection(null)(…) does not transform coordinates", function(te
     {type: "lineTo", x: -62, y: 17},
     {type: "closePath"}
   ]);
-  test.end();
 });
 
-tape("geoPath.context(null)(null) returns null", function(test) {
-  var path = d3_geo.geoPath();
-  test.strictEqual(path(), null);
-  test.strictEqual(path(null), null);
-  test.strictEqual(path(undefined), null);
-  test.end();
+it("geoPath.context(null)(null) returns null", () => {
+  const path = geoPath();
+  assert.strictEqual(path(), null);
+  assert.strictEqual(path(null), null);
+  assert.strictEqual(path(undefined), null);
 });
 
-tape("geoPath.context(null)(Unknown) returns null", function(test) {
-  var path = d3_geo.geoPath();
-  test.strictEqual(path({type: "Unknown"}), null);
-  test.strictEqual(path({type: "__proto__"}), null);
-  test.end();
+it("geoPath.context(null)(Unknown) returns null", () => {
+  const path = geoPath();
+  assert.strictEqual(path({type: "Unknown"}), null);
+  assert.strictEqual(path({type: "__proto__"}), null);
 });
 
-tape("geoPath(LineString) then geoPath(Point) does not treat the point as part of a line", function(test) {
-  var context = testContext(), path = d3_geo.geoPath().projection(equirectangular).context(context);
+it("geoPath(LineString) then geoPath(Point) does not treat the point as part of a line", () => {
+  const context = testContext(), path = geoPath().projection(equirectangular).context(context);
   path({
     type: "LineString",
     coordinates: [[-63, 18], [-62, 18], [-62, 17]]
   });
-  test.deepEqual(context.result(), [
+  assert.deepStrictEqual(context.result(), [
     {type: "moveTo", x: 165, y: 160},
     {type: "lineTo", x: 170, y: 160},
     {type: "lineTo", x: 170, y: 165}
@@ -215,9 +198,8 @@ tape("geoPath(LineString) then geoPath(Point) does not treat the point as part o
     type: "Point",
     coordinates: [-63, 18]
   });
-  test.deepEqual(context.result(), [
+  assert.deepStrictEqual(context.result(), [
     {type: "moveTo", x: 170, y: 160},
     {type: "arc", x: 165, y: 160, r: 4.5}
   ]);
-  test.end();
 });
