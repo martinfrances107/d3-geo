@@ -2,6 +2,14 @@ import assert from "assert";
 import {extent} from "d3-array";
 import {geoGraticule} from "../src/index.js";
 
+
+it("graticule.extent() gets precision", () => {
+  const  g = geoGraticule();
+  assert.strictEqual(g.precision(), 2.5);
+  g.precision(999)
+  assert.strictEqual(g.precision(), 999);
+});
+
 it("graticule.extent(…) sets extentMinor and extentMajor", () => {
   const g = geoGraticule().extent([[-90, -45], [90, 45]]);
   assert.deepStrictEqual(g.extentMinor(), [[-90, -45], [90, 45]]);
