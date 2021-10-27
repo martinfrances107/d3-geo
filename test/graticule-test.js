@@ -2,7 +2,6 @@ import assert from "assert";
 import {extent} from "d3-array";
 import {geoGraticule} from "../src/index.js";
 
-
 it("graticule.extent() gets precision", () => {
   const  g = geoGraticule();
   assert.strictEqual(g.precision(), 2.5);
