@@ -2,7 +2,8 @@
     <title>World Map - Canvas Demo</title>
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://unpkg.com/topojson@3"></script>
+    <!-- <script src="https://unpkg.com/topojson@3"></script> -->
+    <script src="../../topojson-client/dist/topojson-client.js"></script>
     <script src="../dist/d3-geo.js"></script>
 </head>
 
@@ -12,7 +13,7 @@
     </noscript>
     <p id="perf">Render Time :- </p>
     <!-- Create an element where the map will take place -->
-    <canvas id="my_dataviz" width="900" height="600"></canvas>
+    <canvas id="my_dataviz" width="1800" height="1200"></canvas>
     <p>
         Based on this tutorial:
     </p>
@@ -40,6 +41,7 @@
         // geographic path generator for given projection and canvas context
         const pathGenerator = d3.geoPath(projection, ctx);
 
+
         // Load external data and boot
         d3.json("./world-atlas/world/50m.json", function (data) {
 
@@ -47,8 +49,7 @@
 
             let mp = world.features[0].geometry;
 
-
-            // initialize the path
+            // Initialize the path.
             ctx.beginPath();
 
             const t0 = performance.now();
@@ -62,6 +63,13 @@
             // Add stroke
             ctx.strokeStyle = "#69b3a2";
             ctx.stroke()
+
+            // Graticule
+            var graticule = d3.geoGraticule();
+            ctx.beginPath();
+            ctx.strokeStyle = '#ccc';
+            pathGenerator(graticule());
+            ctx.stroke();
 
             elapsed = (t1 - t0).toPrecision(6);
             document.getElementById("perf").innerHTML = `Render Time: ${elapsed} ms`;
