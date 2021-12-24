@@ -3,7 +3,8 @@
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
     <!-- <script src="https://unpkg.com/topojson@3"></script> -->
-    <script src="../../topojson-client/dist/topojson-client.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+
     <script src="../dist/d3-geo.js"></script>
 </head>
 
@@ -45,24 +46,22 @@
         // Load external data and boot
         d3.json("./world-atlas/world/50m.json", function (data) {
 
-            const world = topojson.feature(data, data.objects.land);
-
-            let mp = world.features[0].geometry;
-
-            // Initialize the path.
-            ctx.beginPath();
-
-            const t0 = performance.now();
-            pathGenerator(mp);
-            const t1 = performance.now();
-
-            // Fill the paths
+            const world = topojson.feature(data, data.objects.countries);
+            const n_geometry = world.features.length;
+            console.log(n_geometry);
             ctx.fillStyle = "#999";
-            ctx.fill();
-
-            // Add stroke
             ctx.strokeStyle = "#69b3a2";
-            ctx.stroke()
+            const t0 = performance.now();
+            for (i = 0; i < n_geometry; i++) {
+                g = world.features[i].geometry;
+                ctx.beginPath();
+                pathGenerator(g);
+                ctx.fill();
+                ctx.stroke()
+            }
+
+
+            const t1 = performance.now();
 
             // Graticule
             var graticule = d3.geoGraticule();
