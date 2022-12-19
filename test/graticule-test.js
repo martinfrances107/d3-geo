@@ -5,7 +5,7 @@ import {geoGraticule} from "../src/index.js";
 it("graticule.extent() gets precision", () => {
   const g = geoGraticule();
   assert.strictEqual(g.precision(), 2.5);
-  g.precision(999)
+  g.precision(999);
   assert.strictEqual(g.precision(), 999);
 });
 
