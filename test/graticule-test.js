@@ -7,9 +7,9 @@ it("graticule.extent(…) sets extentMinor and extentMajor", () => {
   assert.deepStrictEqual(g.extentMinor(), [[-90, -45], [90, 45]]);
   assert.deepStrictEqual(g.extentMajor(), [[-90, -45], [90, 45]]);
 
-  const g_reversed = geoGraticule().extent([[90, 45], [-90, -45]]);
-  assert.deepStrictEqual(g_reversed.extentMinor(), [[-90, -45], [90, 45]]);
-  assert.deepStrictEqual(g_reversed.extentMajor(), [[-90, -45], [90, 45]]);
+  const gReversed = geoGraticule().extent([[90, 45], [-90, -45]]);
+  assert.deepStrictEqual(gReversed.extentMinor(), [[-90, -45], [90, 45]]);
+  assert.deepStrictEqual(gReversed.extentMajor(), [[-90, -45], [90, 45]]);
 });
 
 it("graticule.extent() gets extentMinor", () => {
