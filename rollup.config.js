@@ -1,5 +1,5 @@
 import {readFileSync} from "fs";
-import {terser} from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import meta from "./package.json" assert {type: "json"};
 
 // Extract copyrights from the LICENSE.
